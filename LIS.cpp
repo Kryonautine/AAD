@@ -20,40 +20,6 @@ vector<int> Take_Vector_Input(int size) {
 
 }
 
-vector<int> LIS_Smaller(vector<int> array, int X) {
-
-	vector<int> ret;
-
-	// Finish this shit lol
-	if (array.size()==0) {
-		return ret;
-	}
-
-	vector<int> array2 = array;
-	array2.pop_back();
-
-	vector<int> m_vector = LIS_Smaller(array2, X);
-	int m = m_vector.size();
-
-	if (*(array.end())<X) {
-		int m_ = LIS_Smaller(array2, *(array.end())).size();
-		m = max(m, 1 + m_);
-	}
-
-	array.push_back(X);
-	return array;
-
-	// This entire function is just directly copied from notes.
-	// Need to check correctness and logic.
-
-}
-
-vector<int> LIS(vector<int> array) {
-
-	return LIS_Smaller(array, MAX_INFINITY);
-
-}
-
 void print_sequence(vector<int> Sequence) {
 	// Prints a vector's elements.
 
@@ -69,6 +35,56 @@ void print_sequence(vector<int> Sequence) {
 		}
 	}
 	cout << endl;
+
+}
+
+vector<int> LIS_Smaller(vector<int> array, int X) {
+
+	vector<int> ret;
+	int m;
+
+	// Finish this shit lol
+	if (array.size()==0) {
+		print_sequence(ret);
+		return ret;
+	}
+
+	vector<int> array2 = array;
+	array2.pop_back();
+
+	vector<int> m1 = LIS_Smaller(array2, X);
+	int m_not = m1.size();
+
+	if (*(array.end())<X) {
+		vector<int> m2 = LIS_Smaller(array2, *(array.end()));
+		int m_including = m2.size();
+		m = max(m_not, 1 + m_including);
+
+		if (m==m_not) {
+			print_sequence(m1);
+			return m1;
+		}
+		else {
+			//m2.push_back(*(array.end()));
+			print_sequence(m2);
+			return m2;
+		}
+
+	}
+
+	array.push_back(X);
+	print_sequence(array);
+	return array;
+
+	// This entire function is just directly copied from notes.
+	// Need to check correctness and logic.
+
+}
+
+vector<int> LIS(vector<int> array) {
+
+	return LIS_Smaller(array, MAX_INFINITY);
+	array.pop_back();
 
 }
 
